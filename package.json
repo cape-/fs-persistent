@@ -1,0 +1,20 @@
+{
+  "name": "fs-persistent",
+  "version": "1.0.0",
+  "description": "Store anything quickly, retrieve it quickly. Uses filesystem to store, not suitable for productive database but it goes well for testing.",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "localStorage",
+    "store",
+    "fs",
+    "setItem",
+    "getItem",
+    "removeItem",
+    "filesystem"
+  ],
+  "author": "Lautaro Capella <laucape@gmail.com>",
+  "license": "MIT"
+}
