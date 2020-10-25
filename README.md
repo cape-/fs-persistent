@@ -4,8 +4,9 @@ A simple tool inspired in *localStorage*.
 
 ## Description
 
-Store anything **quickly**, retrieve it **quickly**. 
-*Uses filesystem to store, not suitable for productive database but it does well for testing.*
+Store anything **quickly**, retrieve it **quickly**. It will be there beyond runtime.
+
+*Uses filesystem to store, not suitable for productive database but it does well for testing purposes.*
 
 ## Methods
 
@@ -89,6 +90,10 @@ const users = persistent('users');
 var theLastOrder = orders.getItem("myLast");
 var theLastUser = users.getItem("myLast");
 ```
+
+## TODO
+
+- Add reviver callback function to `getItem`
 
 ## Author
 
