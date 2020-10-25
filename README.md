@@ -1,12 +1,12 @@
 # fs-Persistent
 
-A simple tool inspired in *localStorage*.
+A simple tool inspired in _localStorage_.
 
 ## Description
 
 Store anything **quickly**, retrieve it **quickly**. It will be there beyond runtime.
 
-*Uses filesystem to store, not suitable for productive database but it does well for testing purposes.*
+_Uses filesystem to store, not suitable for productive database but it does well for testing purposes._
 
 ## Simple usage
 
@@ -42,51 +42,81 @@ removeItem("aUser");
 
 ## There is more
 
-You can instantiate multiple persistent instances with different routes by using the `baseDir` argument in `persistent`.
+You can use `baseDir` argument in `persistent` to acomplish data partition.
 
 ```javascript
 const persistent = require("fs-persistent");
-const orders = persistent('orders');
-const closedOrders = persistent('orders/closed');
-const users = persistent('users');
+const users = persistent("users");
 
-orders.setItem("myLast", new Order());
-users.setItem("myLast", new User());
-
+// This will be saved in ./users/
+users.setItem("current", { name: "Cipriano", lastname: "Reyes" });
 ```
 
-Then... 
+You can instantiate multiple persistent instances with different routes. They can be nested.
 
 ```javascript
 const persistent = require("fs-persistent");
 const orders = persistent('orders');
-const users = persistent('users');
+const orders.closed = persistent('orders/closed'); // You can nest
+const orders.open = persistent('orders/open'); // it can be very useful
 
-var theLastOrder = orders.getItem("myLast");
-var theLastUser = users.getItem("myLast");
+var myOrder = new Order();
+
+orders.setItem("myLast", myOrder);
+orders.open.setItem("myLast", myOrder);
+```
+
+The above code generates this filesystem tree
+
+```bash
+.
++-- orders
+|  +-- closed
+|  +-- open
+|  |   +-- myLast.json
+|  +-- myLast.json
+```
+
+Then...
+
+```javascript
+const persistent = require("fs-persistent");
+const orders.closed = persistent('orders/closed');
+const orders.open = persistent('orders/open');
+
+// When order is closed
+orders.closed.setItem("myLast",orders.open.getItem("myLast");
+orders.open.removeItem("myLast");
 ```
 
 ## Methods
 
 ### setItem(key, data)
-- `key` *String*: Any name you want to give it.
-- `data` *Any*: The data to store.
 
-*Returns*
+- `key` _String_: Any name you want to give it.
+- `data` _Any_: The data to store.
 
-- `data` *Any*: The same `data`.
-***
+_Returns_
+
+- `data` _Any_: The same `data`.
+
+---
+
 ### getItem(key)
-- `key` *String*: The stored key.
 
-*Returns*
+- `key` _String_: The stored key.
 
-- `data` *Any*: The stored `data`.
-***
+_Returns_
+
+- `data` _Any_: The stored `data`.
+
+---
+
 ### removeItem(key)
-- `key` *String*: The stored key.
 
-*Returns*
+- `key` _String_: The stored key.
+
+_Returns_
 
 - `null`
 
@@ -101,5 +131,3 @@ var theLastUser = users.getItem("myLast");
 ## License
 
 MIT © [Lautaro Capella](https://github.com/cape-)
-
-
