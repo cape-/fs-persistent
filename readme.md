@@ -24,7 +24,7 @@ Returns
 
 - `data` *Any*: The stored `data`.
 
-### removeItem(key, val)
+### removeItem(key)
 - `key` *String*: The stored key.
 
 Returns
