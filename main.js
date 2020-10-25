@@ -6,15 +6,19 @@ const fs = require('fs')
 const path = require('path')
 
 /**
+ * @constant __defaultBaseDir Default baseDir
+ */
+const __defaultBaseDir = 'persistent'
+
+/**
  * Returns an instance of fs-persistent
  * @param {string} baseDir Partition for items  
  * @returns {object} Object with fs-persistent API methods.
  */
-module.exports = function (baseDir = 'persistent') {
-  var __baseDir = path.join(process.cwd(), baseDir)
-  fs.mkdir(__baseDir, { recursive: true }, err => { if (err) throw err })
+module.exports = function (baseDir = __defaultBaseDir) {
+  const __baseDir = path.join(process.cwd(), baseDir)
+  fs.mkdirSync(__baseDir, { recursive: true })
   return {
-    _baseDir: __baseDir,
     /**
      * Returns an item stored with setItem()
      * @param {string} key The stored key you want to retrieve
@@ -22,7 +26,8 @@ module.exports = function (baseDir = 'persistent') {
      */
     getItem: function (key) {
       try {
-        return JSON.parse(fs.readFileSync(path.join(this._baseDir, `${key}.json`), 'utf-8'))
+        // the "|| __defaultBaseDir" is needed for method extraction, where this._baseDir = undefined
+        return JSON.parse(fs.readFileSync(path.join(__baseDir, `${key}.json`), 'utf-8'))
       } catch (err) {
         return null
       }
@@ -34,7 +39,8 @@ module.exports = function (baseDir = 'persistent') {
      * @returns {*} The same data to store.
      */
     setItem: function (key, data) {
-      fs.writeFile(path.join(this._baseDir, `${key}.json`), JSON.stringify(data), { encoding: 'utf-8' })
+      // the "|| __defaultBaseDir" is needed for method extraction, where this._baseDir = undefined
+      fs.writeFile(path.join(__baseDir, `${key}.json`), JSON.stringify(data), { encoding: 'utf-8' }, err => { if (err) throw err })
       return data
     },
     /**
