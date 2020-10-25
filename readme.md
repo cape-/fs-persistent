@@ -12,17 +12,23 @@ Store anything **quickly**, retrieve it **quickly**.
 ### setItem(key, data)
 - `key` *String*: Any name you want to give it.
 - `data` *Any*: The data to store.
-Return
+
+Returns
+
 - `data` *Any*: The same `data`.
 
 ### getItem(key)
 - `key` *String*: The stored key.
-Return
+
+Returns
+
 - `data` *Any*: The stored `data`.
 
 ### removeItem(key, val)
 - `key` *String*: The stored key.
-Return
+
+Returns
+
 - `null`
 
 
