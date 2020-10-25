@@ -68,7 +68,7 @@ orders.open.setItem("myLast", myOrder);
 
 The above code generates this filesystem tree
 
-```bash
+```
 .
 +-- orders
 |  +-- closed
