@@ -22,7 +22,7 @@ module.exports = function (baseDir = 'persistent') {
      */
     getItem: function (key) {
       try {
-        return JSON.parse(fs.readFileSync(path.join(process.cwd(), this._baseDir, `${key}.json`), 'utf-8'))
+        return JSON.parse(fs.readFileSync(path.join(this._baseDir, `${key}.json`), 'utf-8'))
       } catch (err) {
         return null
       }
@@ -34,7 +34,7 @@ module.exports = function (baseDir = 'persistent') {
      * @returns {*} The same data to store.
      */
     setItem: function (key, data) {
-      fs.writeFile(path.join(process.cwd(), this._baseDir, `${key}.json`), JSON.stringify(data), { encoding: 'utf-8' })
+      fs.writeFile(path.join(this._baseDir, `${key}.json`), JSON.stringify(data), { encoding: 'utf-8' })
       return data
     },
     /**
