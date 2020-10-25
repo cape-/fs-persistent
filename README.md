@@ -8,31 +8,6 @@ Store anything **quickly**, retrieve it **quickly**. It will be there beyond run
 
 *Uses filesystem to store, not suitable for productive database but it does well for testing purposes.*
 
-## Methods
-
-### setItem(key, data)
-- `key` *String*: Any name you want to give it.
-- `data` *Any*: The data to store.
-
-Returns
-
-- `data` *Any*: The same `data`.
-
-### getItem(key)
-- `key` *String*: The stored key.
-
-Returns
-
-- `data` *Any*: The stored `data`.
-
-### removeItem(key)
-- `key` *String*: The stored key.
-
-Returns
-
-- `null`
-
-
 ## Simple usage
 
 Just require, instantiate and extract the methods you will use.
@@ -90,6 +65,30 @@ const users = persistent('users');
 var theLastOrder = orders.getItem("myLast");
 var theLastUser = users.getItem("myLast");
 ```
+
+## Methods
+
+### setItem(key, data)
+- `key` *String*: Any name you want to give it.
+- `data` *Any*: The data to store.
+
+*Returns*
+
+- `data` *Any*: The same `data`.
+***
+### getItem(key)
+- `key` *String*: The stored key.
+
+*Returns*
+
+- `data` *Any*: The stored `data`.
+***
+### removeItem(key)
+- `key` *String*: The stored key.
+
+*Returns*
+
+- `null`
 
 ## TODO
 
