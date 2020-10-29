@@ -81,8 +81,10 @@ Then...
 
 ```javascript
 const persistent = require("fs-persistent");
-const orders.closed = persistent('orders/closed');
-const orders.open = persistent('orders/open');
+const orders = {
+  closed: persistent('orders/closed'),
+  open: persistent('orders/open')
+};
 
 // When order is closed
 orders.closed.setItem("myLast",orders.open.getItem("myLast");
