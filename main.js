@@ -15,7 +15,7 @@ const __defaultBaseDir = 'persistent'
  * @param {string} baseDir Partition for items  
  * @returns {object} Object with fs-persistent API methods.
  */
-module.exports = function (baseDir = __defaultBaseDir) {
+module.exports = function (baseDir = __defaultBaseDir, reviver = (key, value) => value) {
   const __baseDir = path.join(process.cwd(), baseDir)
   fs.mkdirSync(__baseDir, { recursive: true })
   return {
@@ -27,7 +27,7 @@ module.exports = function (baseDir = __defaultBaseDir) {
     getItem: function (key) {
       try {
         // the "|| __defaultBaseDir" is needed for method extraction, where this._baseDir = undefined
-        return JSON.parse(fs.readFileSync(path.join(__baseDir, `${key}.json`), 'utf-8'))
+        return JSON.parse(fs.readFileSync(path.join(__baseDir, `${key}.json`), 'utf-8'), reviver)
       } catch (err) {
         return null
       }
