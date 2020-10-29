@@ -122,9 +122,91 @@ _Returns_
 
 - `null`
 
-## TODO
+## Using a `Reviver`
 
-- Add reviver callback function to `getItem`
+A reviver is a type of callback function that can transform the values parsed by JSON engine. It is intended to "revive" actual objects by giving you an instance to rejoin data (stored as JSON) with methods.
+
+Use the `reviver` argument of `persistent` to pass the callback function.
+
+```javascript
+const persistent = require('fs-persistent')
+const testWithReviver = persistent('testReviver', (key, value) => {
+    // console.log(`REVIVER KEY ${key} VAL ${value}`); // for Debugging
+
+    if (Number(value) === value) { // You can apply conditions on values 
+        return value * 2
+    } else if (key === 'secretValue') { // or on keys
+        return 'XXXXXX'
+    } else if (key === 'revivedAt') { // to transform the returning value
+        return (new Date()).toISOString()
+    }
+    return value   // Or just return the original value
+})
+```
+
+You can store any data, and it will pass trough the `reviver` when you pull it back 
+
+```javascript
+// some dummy Object
+const testObject = {
+    name: 'John',
+    age: 34,
+    heigth: 1.78,
+    email: 'john@foos.com',
+    secretValue: 'A1B2C3D4E5F6',
+    revivedAt: null
+}
+
+// some dummy Array
+const testArray = [2, 3, 5, 8, 13, 'as fxq', 23, 4, 6, 10, 16, 2, 3, 1, 1, 1]
+
+
+testWithReviver.setItem('obj', testObject, true)
+testWithReviver.setItem('arr', testArray, true)
+
+```
+
+let's see the result of `getItem` for `"obj"` compared with `testObject`
+
+```javascript
+const newObject = testWithReviver.getItem('obj')
+console.log(testObject);
+/* Outputs:
+{
+    name: 'John',
+    age: 34,
+    heigth: 1.78,
+    email: 'john@foos.com',
+    secretValue: 'A1B2C3D4E5F6',
+    revivedAt: null
+}
+*/
+console.log(newObject);
+/* Outputs:
+{
+    name: 'John',
+    age: 68,
+    heigth: 3.56,
+    email: 'john@foos.com',
+    secretValue: 'XXXXXX',
+    revivedAt: '2020-10-29T12:47:27.831Z'
+}
+*/
+```
+
+let's see the result of `getItem` for `"arr"` compared with `testArray`
+
+```javascript
+const newArray = testWithReviver.getItem('arr')
+console.log(testArray);
+/* Outputs:
+[  2,  3,  5,  8,  13, 'as fxq',  23, 4,  6,  10, 16, 2,  3,  1,  1,  1  ]
+*/
+console.log(newArray);
+/* Outputs:
+[  4,  6,  10,  16, 26, 'as fxq',  46, 8,  12,  20, 32, 4,  6,  2,  2,  2  ]
+*/
+```
 
 ## Author
 

@@ -26,7 +26,6 @@ module.exports = function (baseDir = __defaultBaseDir, reviver = (key, value) =>
      */
     getItem: function (key) {
       try {
-        // the "|| __defaultBaseDir" is needed for method extraction, where this._baseDir = undefined
         return JSON.parse(fs.readFileSync(path.join(__baseDir, `${key}.json`), 'utf-8'), reviver)
       } catch (err) {
         return null
@@ -38,9 +37,11 @@ module.exports = function (baseDir = __defaultBaseDir, reviver = (key, value) =>
      * @param {*} data The data to store.
      * @returns {*} The same data to store.
      */
-    setItem: function (key, data) {
-      // the "|| __defaultBaseDir" is needed for method extraction, where this._baseDir = undefined
-      fs.writeFile(path.join(__baseDir, `${key}.json`), JSON.stringify(data), { encoding: 'utf-8' }, err => { if (err) throw err })
+    setItem: function (key, data, sync = false) {
+      if (sync)
+        fs.writeFileSync(path.join(__baseDir, `${key}.json`), JSON.stringify(data), { encoding: 'utf-8' })
+      else
+        fs.writeFile(path.join(__baseDir, `${key}.json`), JSON.stringify(data), { encoding: 'utf-8' }, err => { if (err) throw err })
       return data
     },
     /**
