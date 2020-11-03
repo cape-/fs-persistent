@@ -97,6 +97,7 @@ orders.open.removeItem("myLast");
 
 - `key` _String_: Any name you want to give it.
 - `data` _Any_: The data to store.
+- `sync` _Bool_: If `true` the filesystem write operation is made **synchronous**. Default `false` (async).
 
 _Returns_
 
@@ -110,7 +111,7 @@ _Returns_
 
 _Returns_
 
-- `data` _Any_: The stored `data`.
+- `data` _Any_: The retrieved `data`.
 
 ---
 
@@ -124,27 +125,25 @@ _Returns_
 
 ## Using a `Reviver`
 
-A reviver is a type of callback function that can transform the values parsed by JSON engine. It is intended to "revive" actual objects by giving you an instance to rejoin data (stored as JSON) with methods.
+A reviver is a type of callback function that can transform the values parsed by JSON engine. It is intended to "bring back to life" (_revive_) actual objects by giving you an instance to rejoin properties (data stored as JSON) with methods (alive at runtime).
 
 Use the `reviver` argument of `persistent` to pass the callback function.
 
 ```javascript
 const persistent = require('fs-persistent')
-const testWithReviver = persistent('testReviver', (key, value) => {
-    // console.log(`REVIVER KEY ${key} VAL ${value}`); // for Debugging
-
-    if (Number(value) === value) { // You can apply conditions on values 
+const persistentWithReviver = persistent('testReviver', (key, value) => {
+    if (Number(value) === value) {      // You can apply conditions on *values* 
         return value * 2
-    } else if (key === 'secretValue') { // or on keys
+    } else if (key === 'secretValue') { // or on *keys*
         return 'XXXXXX'
-    } else if (key === 'revivedAt') { // to transform the returning value
+    } else if (key === 'revivedAt') {   // to transform the returning value
         return (new Date()).toISOString()
     }
     return value   // Or just return the original value
 })
 ```
 
-You can store any data, and it will pass trough the `reviver` when you pull it back 
+You can store any data, and it will pass trough the `reviver` when you retrieve it. 
 
 ```javascript
 // some dummy Object
@@ -158,18 +157,18 @@ const testObject = {
 }
 
 // some dummy Array
-const testArray = [2, 3, 5, 8, 13, 'as fxq', 23, 4, 6, 10, 16, 2, 3, 1, 1, 1]
+const testArray = [2, 3, 5, 8, 13, 'fooBar']
 
 
-testWithReviver.setItem('obj', testObject, true)
-testWithReviver.setItem('arr', testArray, true)
+persistentWithReviver.setItem('obj', testObject, true)
+persistentWithReviver.setItem('arr', testArray, true)
 
 ```
 
 let's see the result of `getItem` for `"obj"` compared with `testObject`
 
 ```javascript
-const newObject = testWithReviver.getItem('obj')
+const newObject = persistentWithReviver.getItem('obj')
 console.log(testObject);
 /* Outputs:
 {
@@ -197,14 +196,14 @@ console.log(newObject);
 let's see the result of `getItem` for `"arr"` compared with `testArray`
 
 ```javascript
-const newArray = testWithReviver.getItem('arr')
+const newArray = persistentWithReviver.getItem('arr')
 console.log(testArray);
 /* Outputs:
-[  2,  3,  5,  8,  13, 'as fxq',  23, 4,  6,  10, 16, 2,  3,  1,  1,  1  ]
+[ 2, 3, 5, 8, 13, 'fooBar' ]
 */
 console.log(newArray);
 /* Outputs:
-[  4,  6,  10,  16, 26, 'as fxq',  46, 8,  12,  20, 32, 4,  6,  2,  2,  2  ]
+[ 4, 6, 10, 16, 26, 'fooBar' ]
 */
 ```
 

@@ -6,13 +6,24 @@ const fs = require('fs')
 const path = require('path')
 
 /**
+ * Fallback constants
+ * 
  * @constant __defaultBaseDir Default baseDir
  */
 const __defaultBaseDir = 'persistent'
 
 /**
+ * `reviver` callback type.
+ *
+ * @callback reviverCallback
+ * @param {string} key Key of JSON object
+ * @param {any} value Value for that key
+ */
+
+/**
  * Returns an instance of fs-persistent
  * @param {string} baseDir Partition for items  
+ * @param {reviverCallback} reviver (Optional) Reviver function for callback. For further detail, see documentation
  * @returns {object} Object with fs-persistent API methods.
  */
 module.exports = function (baseDir = __defaultBaseDir, reviver = (key, value) => value) {
@@ -35,6 +46,7 @@ module.exports = function (baseDir = __defaultBaseDir, reviver = (key, value) =>
      * Stores any kind of data into de filesystem persistently
      * @param {string} key Any name you want to give it.
      * @param {*} data The data to store.
+     * @param {boolean} sync If true the filesystem write operation is made synchronous. Default false (async)
      * @returns {*} The same data to store.
      */
     setItem: function (key, data, sync = false) {
