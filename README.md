@@ -71,10 +71,10 @@ The above code generates this filesystem tree
 ```
 .
 +-- orders
-|  +-- closed
-|  +-- open
-|  |   +-- myLast.json
-|  +-- myLast.json
+|   +-- closed
+|   +-- open
+|   |   +-- myLast.json
+|   +-- myLast.json
 ```
 
 Then...
@@ -97,7 +97,7 @@ orders.open.removeItem("myLast");
 
 - `key` _String_: Any name you want to give it.
 - `data` _Any_: The data to store.
-- `sync` _Bool_: If `true` the filesystem write operation is made **synchronous**. Default `false` (async).
+- `async` _Bool_: _(Optional)_ When `true` the filesystem write operation is made **async**. Default `false` (sync write). *Note: Async is better for example in a mass data storage process or when you need to speed up response time. But it __will not work__ if used immediately before a getItem() call.*
 
 _Returns_
 
