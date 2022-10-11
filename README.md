@@ -57,8 +57,8 @@ You can instantiate multiple persistent instances with different routes. They ca
 ```javascript
 const persistent = require("fs-persistent");
 const orders = persistent('orders');
-const orders.closed = persistent('orders/closed'); // You can nest
-const orders.open = persistent('orders/open'); // it can be very useful
+orders.closed = persistent('orders/closed'); // You can nest
+orders.open = persistent('orders/open'); // it can be very useful
 
 var myOrder = new Order();
 
